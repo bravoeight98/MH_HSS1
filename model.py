@@ -25,20 +25,40 @@ def load_data(data_dir):
     labels = {'heart': 0, 'long': 1, 'oval': 2, 'round': 3, 'square': 4}
     data = []
     target = []
+    
+    # Use os.path.join to handle Windows file paths
     for label, idx in labels.items():
-        folder_path = os.path.join(data_dir, label)
+        folder_path = os.path.join(data_dir, label)  # This will create Windows-friendly paths
         for image_name in os.listdir(folder_path):
             img_path = os.path.join(folder_path, image_name)
-            image = cv2.imread(img_path)
-            image = cv2.resize(image, (128, 128))
-            data.append(image)
-            target.append(idx)
+            
+            # Ensure only images are read by checking extensions
+            if image_name.endswith(('.png', '.jpg', '.jpeg')):
+                image = cv2.imread(img_path)
+                
+                # Handle image loading errors
+                if image is not None:
+                    image = cv2.resize(image, (128, 128))
+                    data.append(image)
+                    target.append(idx)
+                else:
+                    print(f"Warning: {img_path} could not be read as an image.")
+                    
     return np.array(data), np.array(target)
 
 # Train and save the model
 if __name__ == "__main__":
-    data_dir = "E:\\_MH\\MH_HSS1\\dataset\\"
+    data_dir = os.path.join(os.getcwd(), 'dataset')  # Adjust to your dataset path
     X, y = load_data(data_dir)
+    
+    # Convert the data to the required format
+    X = X.astype('float32') / 255.0  # Normalize the data
+    
     model = create_model()
-    model.fit(X, y, epochs=10)
+    
+    # Train the model
+    model.fit(X, y, epochs=10, batch_size=32)
+    
+    # Save the model
     model.save('face_shape_model.h5')
+    print("Model saved as face_shape_model.h5")
