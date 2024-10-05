@@ -37,7 +37,7 @@ def load_data(data_dir):
 
 # Train and save the model
 if __name__ == "__main__":
-    data_dir = "dataset\\"
+    data_dir = "E://_MH//MH_HSS1//dataset//"
     X, y = load_data(data_dir)
     model = create_model()
     model.fit(X, y, epochs=10)
