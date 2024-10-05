@@ -21,6 +21,7 @@ const App = () => {
       .then(data => setHairstyleSuggestion(data.hairstyle))
       .catch(error => console.error('Error:', error));
   };
+  
 
   return (
     <div>
