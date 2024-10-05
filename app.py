@@ -39,6 +39,7 @@ def predict():
     
     predicted_shape = face_shapes[face_shape_idx]
     suggested_hairstyle = hairstyle_suggestion[predicted_shape]
+    print(suggested_hairstyle)
 
     return jsonify({
         'face_shape': predicted_shape,
